@@ -1,0 +1,23 @@
+[project]
+name = "recomendador-produtos-ml"
+version = "0.1.0"
+description = "Filtro colaborativo para e-commerce: matriz usuario-item e recomendacao Top-N com precisao@K."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "implicit>=0.7",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
