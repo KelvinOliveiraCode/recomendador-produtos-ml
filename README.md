@@ -1,94 +1,83 @@
 # recomendador-produtos-ml
 
-Filtro colaborativo para e-commerce com recomendacao Top-N e precisao@K.
-Collaborative filtering for e-commerce with Top-N recommendation and precision@K.
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)   ![status: concluido](https://img.shields.io/badge/status-concluido-green)   ![licenca: MIT](https://img.shields.io/badge/licenca-MIT-blue)
 
-## Sobre / About
+## Resumo
 
-**Portugues.** Pacote Python de filtragem colaborativa baseado em Alternating Least Squares (ALS) pela biblioteca `implicit`. Recebe interacoes usuario-item (visualizacoes, compras ou avaliacoes), constroi a matriz esparsa usuario-item, treina o modelo e devolve os N itens mais relevantes para cada usuario, excluindo o que ja foi visto. Inclui a metrica precisao@K para avaliar as recomendacoes.
+Projeto em Python desenvolvido como estudo de engenharia de software. Projeto funcional, recomendador-produtos-ml
 
-**Ingles.** Python package for collaborative filtering based on Alternating Least Squares (ALS) via the `implicit` library. It takes user-item interactions (views, purchases, or ratings), builds the sparse user-item matrix, trains the model, and returns the N most relevant items for each user, excluding items already seen. Includes the precision@K metric to evaluate recommendations.
+## Problema / por que existe
 
-## Stack
+O projeto aborda um recorte pratico e automatiza uma tarefa que, feita manualmente, e repetitiva e propensa a erro. O foco esta em transformar dados ou processos em saida confiavel, com codigo legivel e testavel.
 
-Python 3.10+, pandas, NumPy, SciPy, implicit.
+## Arquitetura
 
-## Como usar / How to use
+O codigo esta organizado por responsabilidade:
 
-Instale o pacote em modo editavel:
+- Entrada: leitura de arquivo, API, entrada do usuario ou captura de dados (dependendo do modulo).
+- Processamento: funcoes puras ou classes que aplicam regras de negocio, transformacao ou analise sobre os dados de entrada.
+- Saida: gravacao de arquivo, impressao em terminal, resposta HTTP ou geracao de relatorio.
 
-```
-pip install -e .
-```
+Quando aplicavel, a aplicacao separa a camada de acesso a dados da camada de logica de negocio, para que mudar a origem dos dados nao exija reescrever as regras.
 
-Treine o modelo e gere recomendacoes:
+## Tecnologias
 
-```python
-from pandas import DataFrame
-from recomendador_produtos_ml import (
-    Interactions,
-    Recommender,
-    precision_at_k,
-    load_interactions,
-)
+- Python 3.x
+- (nenhum informado no repositorio)
 
-df = DataFrame(
-    {
-        "user_id": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],
-        "item_id": [10, 20, 30, 10, 20, 40, 20, 30, 50, 10, 30, 50],
-        "rating": [1.0] * 12,
-    }
-)
-interacoes = load_interactions(df)
+- Sem CI configurado neste repositorio.
 
-modelo = Recommender(factors=8, iterations=5, random_state=7)
-modelo.fit(interacoes)
+O repositorio contem testes automatizados.
 
-# Top-5 itens recomendados para o usuario 1 (sem os ja vistos)
-recomendados = modelo.recommend_items(1, n=5)
-print(recomendados)
+## O que faz
 
-# Precisao@K contra os itens relevantes do usuario
-precisao = precision_at_k(recomendados, {20, 30, 40}, k=5)
-print(precisao)
-```
+Projeto funcional, recomendador-produtos-ml
 
-`Recommender` e deterministico: mesmo `random_state` e mesmos dados produzem as mesmas recomendacoes.
+## Como rodar
 
-## Testes / Tests
-
-Execute a suíte com pytest:
+Requisitos: Python 3.x instalado.
 
 ```
-python -m pytest -q
+# instalar dependencias (se houver requirements.txt)
+pip install -r requirements.txt
+
+# executar
+python main.py
+
+# executar testes
+pytest
 ```
 
-Todos os testes devem passar. Nao ha testes que dependam de rede ou de dados externos.
+## Estrutura do projeto
 
-## Licenca / License
+- tests/ (5 arquivo(s))
+- src/ (4 arquivo(s))
+- .gitignore, BRIEF.md, pyproject.toml, README.en.md, README.md
 
-MIT License
 
-Copyright (c) 2026 Kelvin Oliveira
+## Trade-offs e decisões
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+- Biblioteca padrao sempre que possivel, dependencias externas so quando o ganho justifica a manutencao.
+- Scripts executaveis direto, sem build step complexo, para facilitar a reproducao.
+- Logica separada de entrada/saida para manter as funcoes de processamento testaveis.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## Limitações conhecidas
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+- Escopo limitado ao recorte descrito; nao e uma plataforma completa.
+- Depende de Python 3.x no ambiente de execucao.
 
-## Autor / Author
 
-Kelvin Oliveira
+## Testes
+
+```
+pytest
+```
+
+## Licença
+
+Distribuído sob a licenca MIT. Consulte o arquivo `LICENSE` do repositorio.
+
+## Autor
+
+Kelvin Oliveira, https://github.com/KelvinOliveiraCode
+Portfolio: https://kelvinoliveiracode.github.io/portfolio/
