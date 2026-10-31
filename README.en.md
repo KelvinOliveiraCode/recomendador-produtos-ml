@@ -1,118 +1,104 @@
 # recomendador-produtos-ml
 
-<div align="center">
-
 **English** · [Português (Brasil)](README.md)
 
-</div>
-
-[![Python 3](https://img.shields.io/badge/Python-3.x-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/) [![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikit-learn)](https://scikit-learn.org/) [![pandas](https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas)](https://pandas.pydata.org/) [![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest)](https://docs.pytest.org/) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
-
-### Projeto funcional ,  recomendador-produtos-ml
-
----
+[![Python 3](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](#) [![implicit](https://img.shields.io/badge/implicit-ALS-7A2E9B?style=flat-square)](#) [![pandas](https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas)](#) [![pytest](https://img.shields.io/badge/pytest-16%20tests-0A9EDC?style=flat-square&logo=pytest)](#) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
 
 ## What it is
 
-Projeto funcional ,  recomendador-produtos-ml
+A **product recommender built on collaborative filtering** with **ALS** (Alternating Least Squares) from the `implicit` library. The lab loads user-item interactions (`user_id`, `item_id`, rating), trains an ALS model and generates Top-N recommendations, with evaluation metrics (precision@k etc.). It is an educational ML project focused on recommendations.
 
----
+## Status
 
-## Quick Start
+An educational ML lab, working and tested (16 tests).
 
-```bash
-# Clone and enter
-git clone https://github.com/KelvinOliveiraCode/<repo>.git
-cd <repo>
+## Features
 
-# Install dependencies
-# No requirements.txt detected
+- **Interaction loading and preparation** (`data.py`): `Interactions` + `load_interactions` (DataFrame → user/item/rating), `build_user_item_matrix`.
+- **ALS model** (`model.py`, class `Recommender`): `fit`, `recommend` and `recommend_items` (Top-N per user).
+- **Metrics** (`metrics.py`): recommendation evaluation (precision@k and more).
+- **Programmatic API**: importable via `recomendador_produtos_ml` (no CLI).
 
-# Run the project
-python main.py
+## Architecture
 
-# Run tests
-pytest
+Three modules: `data` (preparation), `model` (ALS/implicit) and `metrics` (evaluation). The `Recommender` takes `Interactions`, trains and exposes recommendations.
+
+```mermaid
+flowchart LR
+    DF[user-item data] --> data[data.py - Interactions]
+    data --> mod[model.py - ALS fit]
+    mod --> REC[Top-N recommendation]
+    mod --> MET[metrics.py - precision@k]
 ```
 
-## How it works
+## Stack
 
-Estrutura limpa e modular com separação de responsabilidades.
+- Python ≥ 3.10
+- pandas ≥ 2.0, numpy ≥ 1.24, scipy ≥ 1.10
+- implicit ≥ 0.7 (ALS)
+- pytest (dev)
 
----
+## Repository layout
 
-## Capabilities
+```
+recomendador-produtos-ml/
+├── pyproject.toml · BRIEF.md
+├── src/recomendador_produtos_ml/
+│   ├── data.py      # interactions + user-item matrix
+│   ├── model.py     # Recommender (ALS)
+│   └── metrics.py   # evaluation
+├── tests/           # 16 tests
+└── LICENSE          # MIT
+```
 
-| Capacidade | Descrição |
-|------------|-------------|
-| Carregamento de Dados | Auto-download do TensorFlow creditcard.csv (284k transações) com cache local |
-| EDA e Visualização | Distribuição de classes, histogramas de Amount, heatmaps de correlação (matplotlib/seaborn) |
-| Pré-processamento | RobustScaler em Amount/Time, split estratificado, remoção de duplicatas |
-| Balanceamento | SMOTE oversampling (fallback: class_weight="balanced") |
-| Modelagem | LogisticRegression, RandomForest, ExtraTrees com RandomizedSearchCV (StratifiedKFold) |
-| Métricas | Accuracy, Precision, Recall, F1, ROC AUC, Specificity, Confusion Matrix |
-| Seleção | Score ponderado: Recall 40% + F1 30% + Precision 20% + Accuracy 10% |
-| Persistência | Serialização joblib para modelo, scaler e resultados completos |
+## Prerequisites and installation
 
+Python ≥ 3.10.
 
----
+```bash
+pip install -e .
+```
 
+## How to run
 
+Programmatic use (no CLI):
 
----
+```python
+from recomendador_produtos_ml.data import load_interactions
+from recomendador_produtos_ml.model import Recommender
 
-## FAQ
+df = ...  # DataFrame with user_id, item_id, rating
+interactions = load_interactions(df)
+rec = Recommender().fit(interactions)
+print(rec.recommend_items(1, n=10))
+```
 
-<details>
-<summary><strong>What is this project?</strong></summary>
+## Tests and quality
 
-A Python study/project demonstrating core concepts.
+Real command (verified by the agent):
 
-</details>
+```bash
+PYTHONPATH=src python -m pytest tests/
+# 16 passed
+```
 
-<details>
-<summary><strong>How do I run it?</strong></summary>
+## Technical decisions and trade-offs
 
-See [Quick Start](#quick-start) for copy-paste commands.
+- **ALS (implicit)** for collaborative filtering: efficient on sparse interaction data; the cost is the `implicit` dependency.
+- **Interaction data instead of item features**: a classic recommendation model, without content/attributes.
 
-</details>
+## Known limitations and roadmap
 
-<details>
-<summary><strong>Are there tests?</strong></summary>
+- No packaged CLI/data entry (use via import).
+- Recommendations by interaction only (cold-start and new items are out of scope).
+- No deployment/service.
 
-No automated tests in this repository.
+## Development process
 
-</details>
+An individual project by Kelvin Oliveira, built with orchestrated AI agents and reviewed by the author. The ALS modeling and the review are the author's.
 
-<details>
-<summary><strong>Can I use this in production?</strong></summary>
+## License and author
 
-This is a **study/portfolio project**. Review and harden (auth, persistence, monitoring, etc.) before production use.
+MIT — Copyright (c) 2026 Kelvin Rebelo de Oliveira.
 
-</details>
-
-
-
----
-
-## Documentation
-
-- **Source Code** ,  Browse the `src/` directory for implementation details
-- **API Reference** ,  Inline docstrings + type hints
-- **Architecture Diagram** ,  See [architecture.mermaid](docs/architecture.mermaid) (if present)
-- **Changelog** ,  [CHANGELOG.md](CHANGELOG.md) (if present)
-- **Contributing** ,  [CONTRIBUTING.md](CONTRIBUTING.md) (if present)
-
-## License
-
-[MIT](LICENSE) ,  Kelvin Oliveira
-
----
-
-<div align="center">
-
-**Built with** · Python 3 + scikit-learn + pandas
-
-**Author** · [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfolio](https://kelvinoliveiracode.github.io/portfolio/)
-
-</div>
+**Author**: [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfolio](https://kelvinoliveiracode.github.io/portfolio/)
